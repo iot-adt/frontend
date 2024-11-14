@@ -1,10 +1,10 @@
 import "./App.css";
-import { RegistrationForm } from "./registration/registration-form";
+import MainPage from "./main/main-page";
 
 function App() {
   return (
     <>
-      <RegistrationForm />
+      <MainPage />
     </>
   );
 }
