@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar as CalendarIcon, LoaderIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -21,6 +21,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { PropsWithChildren, Suspense } from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { createUser, temporaryUserQUery } from "./remote";
+import NoUserErrorPage from "./NoUserContent";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -35,6 +39,27 @@ const formSchema = z.object({
 });
 
 export function RegistrationPage() {
+  return (
+    <Suspense fallback={<LoaderIcon />}>
+      <NoUserGuard>
+        <Content />
+      </NoUserGuard>
+    </Suspense>
+  );
+}
+
+function NoUserGuard({ children }: PropsWithChildren) {
+  const { data } = useSuspenseQuery(temporaryUserQUery);
+
+  if (data != null) {
+    return <NoUserErrorPage />;
+  }
+
+  return <>{children}</>;
+}
+
+function Content() {
+  const { data } = useSuspenseQuery(temporaryUserQUery);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -42,9 +67,8 @@ export function RegistrationPage() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    // @TODO: 유저등록 API 호출
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    await createUser({ ...values, rfid: data.rfid });
   }
 
   return (
