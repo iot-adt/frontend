@@ -51,7 +51,7 @@ export function RegistrationPage() {
 function NoUserGuard({ children }: PropsWithChildren) {
   const { data } = useSuspenseQuery(temporaryUserQUery);
 
-  if (data != null) {
+  if (data == null) {
     return <NoUserErrorPage />;
   }
 
