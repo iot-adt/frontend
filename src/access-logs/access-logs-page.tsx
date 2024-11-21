@@ -10,8 +10,17 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { accessLogsQuery } from "./remote";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { Suspense } from "react";
 
 export default function AccessLogsPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Content />
+    </Suspense>
+  );
+}
+
+function Content() {
   const { data: accessLogs } = useSuspenseQuery(accessLogsQuery);
 
   return (
