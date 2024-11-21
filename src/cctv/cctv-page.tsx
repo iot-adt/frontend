@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Maximize2, Minimize2, Play, Pause, VideoOff } from "lucide-react";
+import { Maximize2, Minimize2, Play, Pause } from "lucide-react";
+import VideoPlayer from "./video-player";
+import VideoFallback from "./video-fallback";
 
 type CCTVFeed = {
   id: string;
@@ -56,16 +58,9 @@ export default function CCTVPage() {
             <CardContent className="p-4">
               <div className="relative aspect-video bg-gray-200 flex items-center justify-center">
                 {feed.url ? (
-                  <img
-                    src={feed.url}
-                    alt={`CCTV feed from ${feed.name}`}
-                    className="w-full h-full object-cover"
-                  />
+                  <VideoPlayer socketUrl={feed.url} className="w-full h-full" />
                 ) : (
-                  <div className="text-gray-400 flex flex-col items-center">
-                    <VideoOff className="h-12 w-12 mb-2" />
-                    <span>영상 없음</span>
-                  </div>
+                  <VideoFallback />
                 )}
                 <div className="absolute top-2 left-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded">
                   {feed.name}

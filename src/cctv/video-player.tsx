@@ -1,40 +1,66 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import mpegts from "mpegts.js";
+import VideoFallback from "./video-fallback";
 
-const VideoPlayer = ({ socketUrl }: { socketUrl: string }) => {
+const VideoPlayer = ({
+  socketUrl,
+  className,
+}: {
+  socketUrl: string;
+  className?: string;
+}) => {
   // useRef의 초기 값 타입을 HTMLVideoElement 또는 null로 지정
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [hasError, setHasError] = useState(false); // 에러 상태 관리
 
   useEffect(() => {
     if (mpegts.getFeatureList().mseLivePlayback) {
-      // 타입스크립트에서는 mpegts.createPlayer의 반환 타입을 명시적으로 확인
       const player = mpegts.createPlayer({
         type: "websocket",
         isLive: true,
         url: socketUrl,
       });
 
-      // videoRef.current가 null이 아닐 때만 attachMediaElement 호출
+      // 비디오 요소에 attach
       if (videoRef.current) {
         player.attachMediaElement(videoRef.current);
+
         player.load();
-        player.play();
+        player.play()?.catch(() => {
+          // 재생 중 에러 발생 시 상태 업데이트
+          setHasError(true);
+        });
+
+        // 플레이어 에러 핸들링
+        player.on(mpegts.Events.ERROR, () => {
+          setHasError(true);
+        });
+      } else {
+        setHasError(true); // 비디오 요소가 없는 경우에도 에러 처리
       }
 
       // 컴포넌트 언마운트 시 플레이어 자원 해제
       return () => {
         player.destroy();
       };
+    } else {
+      setHasError(true); // mseLivePlayback을 지원하지 않으면 에러
     }
   }, [socketUrl]);
 
   return (
-    <div>
-      <video
-        ref={videoRef}
-        style={{ width: "100%", height: "auto" }}
-        controls
-      />
+    <div className={className} style={{ textAlign: "center" }}>
+      {hasError ? (
+        <VideoFallback />
+      ) : (
+        <video
+          ref={videoRef}
+          style={{ width: "100%", height: "auto" }}
+          controls
+          autoPlay
+          muted
+        />
+      )}
     </div>
   );
 };
