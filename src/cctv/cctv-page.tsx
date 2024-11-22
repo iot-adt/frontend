@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Maximize2, Minimize2, Play, Pause } from "lucide-react";
-import VideoPlayer from "./video-player";
 import VideoFallback from "./video-fallback";
 import ImageStreamer from "./img-streaming";
 
