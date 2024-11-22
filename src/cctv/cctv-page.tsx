@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Maximize2, Minimize2, Play, Pause } from "lucide-react";
 import VideoPlayer from "./video-player";
 import VideoFallback from "./video-fallback";
+import ImageStreamer from "./img-streaming";
 
 type CCTVFeed = {
   id: string;
@@ -12,7 +13,7 @@ type CCTVFeed = {
 };
 
 const cctvFeeds: CCTVFeed[] = [
-  { id: "1", name: "출입문", url: "/placeholder.svg?height=300&width=400" },
+  { id: "1", name: "출입문", url: "ws://192.168.1.163:5000/video" },
   { id: "2", name: "1층 내부", url: null },
   { id: "3", name: "2층 내부", url: "/placeholder.svg?height=300&width=400" },
   { id: "4", name: "외부", url: null },
@@ -58,7 +59,10 @@ export default function CCTVPage() {
             <CardContent className="p-4">
               <div className="relative aspect-video bg-gray-200 flex items-center justify-center">
                 {feed.url ? (
-                  <VideoPlayer socketUrl={feed.url} className="w-full h-full" />
+                  <ImageStreamer
+                    socketUrl={feed.url}
+                    className="w-full h-full"
+                  />
                 ) : (
                   <VideoFallback />
                 )}

@@ -50,17 +50,17 @@ const VideoPlayer = ({
 
   return (
     <div className={className} style={{ textAlign: "center" }}>
-      {hasError ? (
+      {/* {hasError ? (
         <VideoFallback />
-      ) : (
-        <video
-          ref={videoRef}
-          style={{ width: "100%", height: "auto" }}
-          controls
-          autoPlay
-          muted
-        />
-      )}
+      ) : ( */}
+      <video
+        ref={videoRef}
+        style={{ width: "100%", height: "auto" }}
+        controls
+        autoPlay
+        muted
+      />
+      {/* )} */}
     </div>
   );
 };

@@ -8,6 +8,7 @@ import { RegistrationPage } from "./registration/registration-page.tsx";
 import CCTVPage from "./cctv/cctv-page.tsx";
 import AccessLogsPage from "./access-logs/access-logs-page.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import CCTVPage2 from "./cctv/cctv-page2.tsx";
 
 const router = createBrowserRouter([
   {
