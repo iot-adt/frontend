@@ -38,7 +38,7 @@ function Content() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {accessLogs.map((log) => (
+          {accessLogs?.map((log) => (
             <TableRow key={log.id}>
               <TableCell>{log.timestamp}</TableCell>
               <TableCell>
