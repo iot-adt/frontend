@@ -35,7 +35,6 @@ function Content() {
             <TableHead>출입 성공 여부</TableHead>
             <TableHead>이름</TableHead>
             <TableHead>출입수단</TableHead>
-            <TableHead className="w-[200px]">출입가능날짜</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -47,7 +46,7 @@ function Content() {
                   {log?.result ? "성공" : "실패"}
                 </Badge>
               </TableCell>
-              <TableCell>{log?.userId}</TableCell>
+              <TableCell>{log?.name}</TableCell>
               <TableCell>{log?.method}</TableCell>
             </TableRow>
           ))}
