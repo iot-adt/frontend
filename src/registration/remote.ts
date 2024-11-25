@@ -1,10 +1,8 @@
+import { client } from "@/remote";
+
 export const temporaryUserQUery = {
   queryKey: ["temporary-user"],
-  queryFn: () =>
-    Promise.resolve({
-      id: 1,
-      rfid: "alalalal",
-    }),
+  queryFn: () => client.get<{ id: number; rfid: string }>("/temporary-user"),
 };
 
 export const createUser = ({
@@ -18,10 +16,10 @@ export const createUser = ({
   startDate: Date;
   endDate: Date;
 }) => {
-  return Promise.resolve({
-    name,
+  return client.post("/users/register", {
     rfid,
-    startDate,
-    endDate,
+    name,
+    accessStart: startDate,
+    accessEnd: endDate,
   });
 };

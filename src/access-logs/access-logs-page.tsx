@@ -21,7 +21,8 @@ export default function AccessLogsPage() {
 }
 
 function Content() {
-  const { data: accessLogs } = useSuspenseQuery(accessLogsQuery);
+  const { data } = useSuspenseQuery(accessLogsQuery);
+  const accessLogs = data.data;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -39,16 +40,15 @@ function Content() {
         </TableHeader>
         <TableBody>
           {accessLogs?.map((log) => (
-            <TableRow key={log.id}>
-              <TableCell>{log.timestamp}</TableCell>
+            <TableRow key={log.logId}>
+              <TableCell>{log.LocalDateTime}</TableCell>
               <TableCell>
-                <Badge variant={log.success ? "outline" : "destructive"}>
-                  {log.success ? "성공" : "실패"}
+                <Badge variant={log.result ? "outline" : "destructive"}>
+                  {log.result ? "성공" : "실패"}
                 </Badge>
               </TableCell>
-              <TableCell>{log.name}</TableCell>
-              <TableCell>{log.accessMethod}</TableCell>
-              <TableCell>{log.validPeriod}</TableCell>
+              <TableCell>{log.userId}</TableCell>
+              <TableCell>{log.method}</TableCell>
             </TableRow>
           ))}
         </TableBody>

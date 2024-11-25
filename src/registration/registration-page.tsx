@@ -68,7 +68,7 @@ function Content() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await createUser({ ...values, rfid: data.rfid });
+    await createUser({ ...values, rfid: data.data?.rfid });
   }
 
   return (
