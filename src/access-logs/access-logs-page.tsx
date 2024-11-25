@@ -40,15 +40,15 @@ function Content() {
         </TableHeader>
         <TableBody>
           {accessLogs?.map((log) => (
-            <TableRow key={log.logId}>
-              <TableCell>{log.LocalDateTime}</TableCell>
+            <TableRow key={log?.logId}>
+              <TableCell>{log?.LocalDateTime}</TableCell>
               <TableCell>
-                <Badge variant={log.result ? "outline" : "destructive"}>
-                  {log.result ? "성공" : "실패"}
+                <Badge variant={log?.result ? "outline" : "destructive"}>
+                  {log?.result ? "성공" : "실패"}
                 </Badge>
               </TableCell>
-              <TableCell>{log.userId}</TableCell>
-              <TableCell>{log.method}</TableCell>
+              <TableCell>{log?.userId}</TableCell>
+              <TableCell>{log?.method}</TableCell>
             </TableRow>
           ))}
         </TableBody>

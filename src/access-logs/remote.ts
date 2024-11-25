@@ -6,10 +6,11 @@ export const accessLogsQuery = {
     client.get<
       {
         logId: number;
-        userId: number;
+        userId?: number;
         LocalDateTime: string;
-        result: boolean;
-        method: string;
+        result?: boolean;
+        method?: string;
+        name?: string;
       }[]
     >("/access/logs"),
 };
