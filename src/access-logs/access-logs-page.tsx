@@ -40,7 +40,7 @@ function Content() {
         <TableBody>
           {accessLogs?.map((log) => (
             <TableRow key={log?.logId}>
-              <TableCell>{log?.LocalDateTime}</TableCell>
+              <TableCell>{log?.timestamp}</TableCell>
               <TableCell>
                 <Badge variant={log?.result ? "outline" : "destructive"}>
                   {log?.result ? "성공" : "실패"}

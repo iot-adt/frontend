@@ -7,7 +7,7 @@ export const accessLogsQuery = {
       {
         logId: number;
         userId?: number;
-        LocalDateTime: string;
+        timestamp: string;
         result?: boolean;
         method?: string;
         name?: string;
