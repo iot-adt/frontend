@@ -2,7 +2,8 @@ import { client } from "@/remote";
 
 export const temporaryUserQUery = {
   queryKey: ["temporary-user"],
-  queryFn: () => client.get<{ id: number; rfid: string }>("/temporary-user"),
+  queryFn: () =>
+    client.get<{ id: number; rfid: string }>("/temporary-user/recent"),
 };
 
 export const createUser = ({
