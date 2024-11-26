@@ -12,9 +12,9 @@ type CCTVFeed = {
 };
 
 const cctvFeeds: CCTVFeed[] = [
-  { id: "1", name: "출입문", url: "ws://192.168.1.165:5000/video" },
-  { id: "2", name: "1층 내부", url: null },
-  { id: "3", name: "2층 내부", url: null },
+  { id: "1", name: "1층 내부", url: "ws://192.168.1.165:5000/video" },
+  { id: "2", name: "2층 내부", url: null },
+  { id: "3", name: "출입문", url: null },
   { id: "4", name: "외부", url: null },
 ];
 
