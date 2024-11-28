@@ -53,7 +53,7 @@ export default function CCTVPage() {
               <div className="flex flex-col space-y-1">
                 <Button
                   variant={isSecurityMode ? "outline" : "destructive"}
-                  size="sm"
+                  size="icon"
                   onClick={() => setIsSecurityMode(!isSecurityMode)}
                   className="w-[100px]"
                 >

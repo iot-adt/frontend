@@ -20,7 +20,7 @@ export default function MainPage() {
             </Link>
           </Button>
           <Button asChild className="w-full py-6 text-lg" variant="outline">
-            <Link to="/user-edit">
+            <Link to="/user-management">
               <UserPlus className="mr-2 h-6 w-6" />
               유저 수정하러 가기
             </Link>
