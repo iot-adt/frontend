@@ -20,6 +20,12 @@ export default function MainPage() {
             </Link>
           </Button>
           <Button asChild className="w-full py-6 text-lg" variant="outline">
+            <Link to="/user-edit">
+              <UserPlus className="mr-2 h-6 w-6" />
+              유저 수정하러 가기
+            </Link>
+          </Button>
+          <Button asChild className="w-full py-6 text-lg" variant="outline">
             <Link to="/cctv">
               <Video className="mr-2 h-6 w-6" />
               CCTV 보러 가기
