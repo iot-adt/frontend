@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Maximize2, Minimize2, Play, Pause } from "lucide-react";
 import VideoFallback from "./video-fallback";
 import ImageStreamer from "./img-streaming";
+import { Label } from "@/components/ui/label";
 
 type CCTVFeed = {
   id: string;
@@ -23,6 +24,7 @@ export default function CCTVPage() {
   const [playingFeeds, setPlayingFeeds] = useState<Set<string>>(
     new Set(cctvFeeds.map((feed) => feed.id))
   );
+  const [isSecurityMode, setIsSecurityMode] = useState(false);
 
   const toggleFullscreen = (feedId: string) => {
     setFullscreenFeed(fullscreenFeed === feedId ? null : feedId);
@@ -42,7 +44,26 @@ export default function CCTVPage() {
 
   return (
     <div className="container mx-auto px-4 py-8 w-full">
-      <h1 className="text-2xl font-bold mb-4">CCTV 모니터링</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">CCTV 모니터링</h1>
+        <div className="flex items-center space-x-8">
+          <div className="flex items-center space-x-2">
+            <div className="flex flex-col space-y-1">
+              <Label htmlFor="security-mode">보안 모드</Label>
+              <div className="flex flex-col space-y-1">
+                <Button
+                  variant={isSecurityMode ? "outline" : "destructive"}
+                  size="sm"
+                  onClick={() => setIsSecurityMode(!isSecurityMode)}
+                  className="w-[100px]"
+                >
+                  {isSecurityMode ? "비활성화" : "활성화"}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div
         className={`grid gap-4 ${
           fullscreenFeed ? "grid-cols-1" : "grid-cols-2"
@@ -61,6 +82,7 @@ export default function CCTVPage() {
                   <ImageStreamer
                     socketUrl={feed.url}
                     className="w-full h-full"
+                    isSecurityMode={isSecurityMode}
                   />
                 ) : (
                   <VideoFallback />
