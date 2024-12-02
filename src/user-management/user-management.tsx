@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import {
   Table,
   TableBody,
@@ -42,6 +42,14 @@ import { User, usersQuery } from "./remote";
 type AccessMethod = "지문" | "카드" | "얼굴인식";
 
 export default function UserManagementPage() {
+  return (
+    <Suspense>
+      <Content />
+    </Suspense>
+  );
+}
+
+function Content() {
   const { data } = useSuspenseQuery(usersQuery);
   const users = data;
 
