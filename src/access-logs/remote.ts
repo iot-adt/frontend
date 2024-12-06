@@ -1,9 +1,9 @@
-import { client } from "@/remote";
+import { CLIENT } from "@/remote";
 
 export const accessLogsQuery = {
   queryKey: ["access-logs"],
   queryFn: () =>
-    CLIENT.apiget<
+    CLIENT.api.get<
       {
         logId: number;
         userId?: number;
