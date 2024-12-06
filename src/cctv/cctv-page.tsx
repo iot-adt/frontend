@@ -5,6 +5,7 @@ import { Maximize2, Minimize2, Play, Pause } from "lucide-react";
 import VideoFallback from "./video-fallback";
 import ImageStreamer from "./img-streaming";
 import { Label } from "@/components/ui/label";
+import { lockWindow, unlockWindow } from "@/window/remote";
 
 type CCTVFeed = {
   id: string;
@@ -25,6 +26,7 @@ export default function CCTVPage() {
     new Set(cctvFeeds.map((feed) => feed.id))
   );
   const [isSecurityMode, setIsSecurityMode] = useState(false);
+  const [isDoorOpen, setIsDoorOpen] = useState(true);
 
   const toggleFullscreen = (feedId: string) => {
     setFullscreenFeed(fullscreenFeed === feedId ? null : feedId);
@@ -61,13 +63,41 @@ export default function CCTVPage() {
                 </Button>
               </div>
             </div>
+            <div className="flex flex-col space-y-1">
+              <Label htmlFor="security-mode">창문</Label>
+              <div className="flex flex-col space-y-1">
+                <Button
+                  variant={isDoorOpen ? "outline" : "destructive"}
+                  size="icon"
+                  onClick={() => {
+                    if (isDoorOpen) {
+                      try {
+                        lockWindow();
+                      } catch (e) {
+                        //
+                      }
+                      setIsDoorOpen(false);
+                      return;
+                    }
+                    try {
+                      unlockWindow();
+                    } catch (e) {
+                      //
+                    }
+                    setIsDoorOpen(true);
+                  }}
+                  className="w-[100px]"
+                >
+                  {isSecurityMode ? "잠금" : "열기"}
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
       <div
-        className={`grid gap-4 ${
-          fullscreenFeed ? "grid-cols-1" : "grid-cols-2"
-        }`}
+        className={`grid gap-4 ${fullscreenFeed ? "grid-cols-1" : "grid-cols-2"}
+          `}
       >
         {cctvFeeds.map((feed) => (
           <Card

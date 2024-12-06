@@ -3,7 +3,7 @@ import { client } from "@/remote";
 export const accessLogsQuery = {
   queryKey: ["access-logs"],
   queryFn: () =>
-    client.get<
+    CLIENT.apiget<
       {
         logId: number;
         userId?: number;

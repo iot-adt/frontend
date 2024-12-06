@@ -3,7 +3,7 @@ import { client } from "@/remote";
 export const temporaryUserQUery = {
   queryKey: ["temporary-user"],
   queryFn: () =>
-    client.get<{ id: number; rfid: string }>("/temporary-user/recent"),
+    CLIENT.apiget<{ id: number; rfid: string }>("/temporary-user/recent"),
 };
 
 export const createUser = ({
@@ -17,7 +17,7 @@ export const createUser = ({
   startDate: Date;
   endDate: Date;
 }) => {
-  return client.post("/users/register", {
+  return CLIENT.apipost("/users/register", {
     rfid,
     name,
     accessStart: startDate,

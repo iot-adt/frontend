@@ -36,7 +36,7 @@ export const usersQuery = {
         endDate: "2024-12-31",
       },
     ] as User[]),
-  // client.get<{ id: number; rfid: string }>("/temporary-user/recent"),
+  // CLIENT.apiget<{ id: number; rfid: string }>("/temporary-user/recent"),
 };
 
 export function editUser() {}
