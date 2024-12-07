@@ -11,23 +11,34 @@ const ImageStreamer = ({
   isSecurityMode?: boolean;
 }) => {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
-  const [ws] = useState(() => new WebSocket(socketUrl));
-  const isSocketReady = ws != null && ws.readyState === 1;
+  const [ws, setWs] = useState<WebSocket | null>(null);
+  const [isSocketReady, setIsSocketReady] = useState(false);
+
+  useEffect(() => {
+    const websocket = new WebSocket(socketUrl);
+
+    websocket.onopen = () => {
+      console.log("WebSocket onopen");
+      setIsSocketReady(true);
+      websocket.send(isSecurityMode === true ? "secure" : "normal");
+    };
+
+    setWs(websocket);
+
+    return () => {
+      websocket.close();
+    };
+  }, [socketUrl, isSecurityMode]);
 
   useEffect(() => {
     if (!isSocketReady) {
       return;
     }
-    ws.send(isSecurityMode === true ? "secure" : "normal");
-  }, [isSecurityMode, isSocketReady, ws]);
-
-  useEffect(() => {
-    if (!isSocketReady) {
+    if (ws == null) {
       return;
     }
 
     ws.onmessage = (event) => {
-      // WebSocket으로 받은 데이터를 img 태그에 표시
       setImageSrc(`data:image/jpeg;base64,${event.data}`);
     };
 
@@ -40,7 +51,7 @@ const ImageStreamer = ({
     };
 
     return () => {
-      ws.close();
+      ws?.close();
     };
   }, [isSocketReady, socketUrl, ws]);
 
