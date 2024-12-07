@@ -37,7 +37,7 @@ import {
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { User, usersQuery } from "./remote";
+import { deleteUser, editUser, User, usersQuery } from "./remote";
 
 type AccessMethod = "지문" | "카드" | "얼굴인식";
 
@@ -50,15 +50,15 @@ export default function UserManagementPage() {
 }
 
 function Content() {
-  const { data } = useSuspenseQuery(usersQuery);
-  const users = data;
+  const { data, refetch } = useSuspenseQuery(usersQuery);
+  const users = data.data;
 
   const [searchTerm, setSearchTerm] = useState("");
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [startDate, setStartDate] = useState<Date>();
-  const [endDate, setEndDate] = useState<Date>();
+  const [accessStart, setAccessStart] = useState<Date>();
+  const [accessEnd, setAccessEnd] = useState<Date>();
 
   const getAccessMethodIcon = (method: AccessMethod) => {
     switch (method) {
@@ -73,8 +73,8 @@ function Content() {
 
   const handleEdit = (user: User) => {
     setSelectedUser(user);
-    setStartDate(new Date(user.startDate));
-    setEndDate(new Date(user.endDate));
+    setAccessStart(new Date(user.accessStart));
+    setAccessEnd(new Date(user.accessEnd));
     setIsEditDialogOpen(true);
   };
 
@@ -83,24 +83,28 @@ function Content() {
     setIsDeleteDialogOpen(true);
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (selectedUser) {
-      // 여기에 실제 삭제 로직 구현
-      console.log("Delete user:", selectedUser.id);
-      setIsDeleteDialogOpen(false);
-      setSelectedUser(null);
+      try {
+        await deleteUser(selectedUser.id);
+        refetch();
+        setIsDeleteDialogOpen(false);
+        setSelectedUser(null);
+      } catch (error) {}
     }
   };
 
-  const handleSaveEdit = () => {
-    if (selectedUser && startDate && endDate) {
-      // 여기에 실제 저장 로직 구현
-      console.log("Save edit:", {
-        userId: selectedUser.id,
-        newStartDate: format(startDate, "yyyy-MM-dd"),
-        newEndDate: format(endDate, "yyyy-MM-dd"),
+  const handleSaveEdit = async () => {
+    if (selectedUser && accessStart && accessEnd) {
+      await editUser(selectedUser.id, {
+        ...selectedUser,
+        accessStart: format(accessStart, "yyyy-MM-dd"),
+        accessEnd: format(accessEnd, "yyyy-MM-dd"),
       });
+      refetch();
+
       setIsEditDialogOpen(false);
+      setSelectedUser(null);
     }
   };
 
@@ -140,20 +144,16 @@ function Content() {
               <TableCell className="font-medium">{user.name}</TableCell>
               <TableCell>
                 <div className="flex flex-wrap gap-2">
-                  {user.accessMethods.map((method) => (
-                    <Badge
-                      key={method}
-                      variant="secondary"
-                      className="flex items-center gap-1"
-                    >
-                      {getAccessMethodIcon(method)}
-                      {method}
-                    </Badge>
-                  ))}
+                  <Badge
+                    variant="secondary"
+                    className="flex items-center gap-1"
+                  >
+                    {getAccessMethodIcon("카드")}
+                    카드
+                  </Badge>
                 </div>
               </TableCell>
-              <TableCell>{user.registrationDate}</TableCell>
-              <TableCell>{`${user.startDate} ~ ${user.endDate}`}</TableCell>
+              <TableCell>{`${user.accessStart} ~ ${user.accessEnd}`}</TableCell>
               <TableCell className="text-left">
                 <div className="flex gap-2">
                   <Button
@@ -197,18 +197,18 @@ function Content() {
                     variant={"outline"}
                     className={cn(
                       "justify-start text-left font-normal",
-                      !startDate && "text-muted-foreground"
+                      !accessStart && "text-muted-foreground"
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {startDate ? format(startDate, "PPP") : "날짜 선택"}
+                    {accessStart ? format(accessStart, "PPP") : "날짜 선택"}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
                   <Calendar
                     mode="single"
-                    selected={startDate}
-                    onSelect={setStartDate}
+                    selected={accessStart}
+                    onSelect={setAccessStart}
                   />
                 </PopoverContent>
               </Popover>
@@ -221,19 +221,21 @@ function Content() {
                     variant={"outline"}
                     className={cn(
                       "justify-start text-left font-normal",
-                      !endDate && "text-muted-foreground"
+                      !accessEnd && "text-muted-foreground"
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {endDate ? format(endDate, "PPP") : "날짜 선택"}
+                    {accessEnd ? format(accessEnd, "PPP") : "날짜 선택"}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
                   <Calendar
                     mode="single"
-                    selected={endDate}
-                    onSelect={setEndDate}
-                    disabled={(date) => (startDate ? date < startDate : false)}
+                    selected={accessEnd}
+                    onSelect={setAccessEnd}
+                    disabled={(date) =>
+                      accessStart ? date < accessStart : false
+                    }
                   />
                 </PopoverContent>
               </Popover>
