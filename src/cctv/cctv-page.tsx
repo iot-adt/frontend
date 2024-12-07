@@ -88,7 +88,7 @@ export default function CCTVPage() {
                   }}
                   className="w-[100px]"
                 >
-                  {isSecurityMode ? "잠금" : "열기"}
+                  {isDoorOpen ? "잠금" : "열기"}
                 </Button>
               </div>
             </div>
