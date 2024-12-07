@@ -1,14 +1,13 @@
 import axios from "axios";
 
-const window = axios.create({
-  baseURL: "http://10.144.45.196:5001",
-});
-const api = axios.create({
-  // baseURL: "http://10.144.85.43:8080/api",
-  baseURL: "http://10.144.45.196:8080/api",
-});
+function creatsAxiosInstance(baseUrl: string) {
+  return axios.create({
+    baseURL: baseUrl,
+  });
+}
 
 export const CLIENT = {
-  window,
-  api,
+  window: creatsAxiosInstance("http://10.144.45.196:5001"),
+  api: creatsAxiosInstance("http://10.144.45.196:8080/api"),
+  door: creatsAxiosInstance("http://10.144.218.248:5000/api"),
 };

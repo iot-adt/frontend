@@ -6,6 +6,7 @@ import VideoFallback from "./video-fallback";
 import ImageStreamer from "./img-streaming";
 import { Label } from "@/components/ui/label";
 import { lockWindow, unlockWindow } from "@/window/remote";
+import { openDoor } from "@/door/remote";
 
 type CCTVFeed = {
   id: string;
@@ -89,6 +90,21 @@ export default function CCTVPage() {
                   className="w-[100px]"
                 >
                   {isDoorOpen ? "잠금" : "열기"}
+                </Button>
+              </div>
+            </div>
+            <div className="flex flex-col space-y-1">
+              <Label htmlFor="security-mode">출입문</Label>
+              <div className="flex flex-col space-y-1">
+                <Button
+                  variant={"outline"}
+                  size="icon"
+                  onClick={() => {
+                    openDoor();
+                  }}
+                  className="w-[100px]"
+                >
+                  출입문 열기
                 </Button>
               </div>
             </div>
