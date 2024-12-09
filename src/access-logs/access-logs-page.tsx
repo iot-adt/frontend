@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { accessLogsQuery } from "./remote";
+import { AccessLogs, accessLogsQuery } from "./remote";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Suspense } from "react";
 
@@ -21,8 +21,15 @@ export default function AccessLogsPage() {
 }
 
 function Content() {
-  const { data } = useSuspenseQuery(accessLogsQuery);
-  const accessLogs = data.data;
+  const { data } = useSuspenseQuery({
+    ...accessLogsQuery,
+    queryFn: async () => {
+      const response = await accessLogsQuery.queryFn();
+      return response.data;
+    },
+    select: (data: AccessLogs[]) => [...data].reverse(),
+  });
+  const accessLogs = data;
 
   return (
     <div className="container mx-auto px-4 py-8">
