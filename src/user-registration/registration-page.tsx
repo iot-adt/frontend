@@ -25,6 +25,7 @@ import { PropsWithChildren, Suspense } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createUser, temporaryUserQUery } from "./remote";
 import NoUserErrorPage from "./NoUserContent";
+import { useNavigate } from "react-router-dom";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -66,9 +67,11 @@ function Content() {
       name: "",
     },
   });
+  const navigate = useNavigate();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     await createUser({ ...values, rfid: data.data?.rfid });
+    navigate("/");
   }
 
   return (
